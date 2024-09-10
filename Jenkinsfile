@@ -14,8 +14,10 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
+                    echo 'Starting to install project dependencies using npm...'
                     // Install the project dependencies using npm
                     sh 'npm install --save'
+                    echo 'Dependencies installed successfully.'
                 }
             }
         }
@@ -23,8 +25,10 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
+                    echo 'Starting to run project tests...'
                     // Optionally, add a step to run tests if there are any defined in package.json
                     sh 'npm test'
+                    echo 'Tests completed successfully.'
                 }
             }
         }
@@ -32,12 +36,17 @@ pipeline {
         stage('Snyk Security Scan') {
             steps {
                 script {
+                    echo 'Starting Snyk security scan...'
                     // Install Snyk globally and run the security scan
                     sh 'npm install -g snyk'
+                    echo 'Snyk installed successfully.'
+
                     // Authenticate Snyk if necessary (add your Snyk auth token to environment variables)
                     // sh 'snyk auth $SNYK_TOKEN'
+                    echo 'Running Snyk security scan with severity threshold set to high...'
                     // Run Snyk security scan
                     sh 'snyk test --severity-threshold=high'
+                    echo 'Snyk scan completed. Check for any critical vulnerabilities.'
                 }
             }
         }
@@ -45,13 +54,11 @@ pipeline {
 
     post {
         always {
-            // Clean up resources if necessary
-            echo 'Pipeline finished.'
+            echo 'Pipeline execution finished. Check the above steps for results.'
         }
 
         failure {
-            // Actions to take if the pipeline fails (notifications, etc.)
-            echo 'Pipeline failed.'
+            echo 'Pipeline execution failed. Please review the logs above for details.'
         }
     }
 }
