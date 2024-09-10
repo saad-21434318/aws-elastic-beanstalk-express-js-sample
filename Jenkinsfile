@@ -1,5 +1,10 @@
 pipeline {
-    agent any  // Use any available agent
+    agent {
+        docker {
+            image 'node:16'  // Use Node 16 Docker image as the build agent
+            args '-u root'  // Run as root to avoid permission issues
+        }
+    }
 
     stages {
         stage('Install Dependencies') {
