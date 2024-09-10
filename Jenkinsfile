@@ -5,7 +5,12 @@ pipeline {
             args '-u root'  // Run as root to avoid permission issues
         }
     }
-
+	
+    environment {
+        // Define the Snyk token environment variable
+        SNYK_TOKEN = credentials('snyk-token')
+    }
+	
     stages {
         stage('Install Dependencies') {
             steps {
